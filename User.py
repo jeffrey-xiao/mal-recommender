@@ -20,9 +20,8 @@ while True:
             if not user in crawled:
                 cnt = getCount(user, animeSet)
                 if cnt >= 100:
+                    append('./userlist.txt', user)
                     userList += [user]
                 crawled.add(user)
                 print str(cnt) + " " + user
-    #print userList
-    save('./userlist.txt', userList)
-    #time.sleep(120.0 - ((time.time() - starttime) % 120.0))
+    print "\nRefresh\n"

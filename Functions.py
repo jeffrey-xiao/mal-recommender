@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 from nltk.downloader import urllib2
+import socket
+import contextlib
+import time
 
 ''' 
 Returns a set from a file
@@ -46,8 +49,11 @@ def append (filePath, item) :
 Returns the number of completed and scored anime in animeSet of a specific user
 '''
 def getCount (user, animeSet):
-    userPage = urllib2.urlopen('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime').read()
-    userSoup = BeautifulSoup(userPage, 'xml')
+    userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+    while userSoup == None:
+        time.sleep(10);
+        userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+    
     cnt = 0
     for anime in userSoup.find_all('anime'):
         if anime.find('series_status') != None and anime.find('my_score') != None and anime.find('series_animedb_id') != None :
@@ -59,10 +65,15 @@ def getCount (user, animeSet):
 Attempts to read a url. If reading fails, it will return None, otherwise it will return
 a Beautiful Soup object
 '''
-def readUrl (url) :
+def readUrl (url, parser = 'html') :
     try:
-        page = urllib2.urlopen(url).read()
-        return BeautifulSoup(page)
-    except urllib2.HTTPError as e:
-        if e.code == 404:
-            return None
+        with contextlib.closing(urllib2.urlopen(url)) as x:
+            page = x.read()
+            soup = BeautifulSoup(page, parser)
+            return soup
+    except urllib2.HTTPError:
+        print "HTTP Error"
+        return None
+    except:
+        print "ERROR"
+        return None
