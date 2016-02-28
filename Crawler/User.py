@@ -1,5 +1,4 @@
 from Functions import *
-import time
 
 starttime = time.time()
 
@@ -7,8 +6,8 @@ userList = []
 
 crawled = set()
 
-animeSet = loadSet('./animelist.txt')
-(crawled, userList) = load('./userlist.txt')
+animeSet = loadSet('../animelist.txt')
+(crawled, userList) = load('../user.txt')
 
 while True:
     page = urllib2.urlopen('http://myanimelist.net/users.php').read()
@@ -20,7 +19,7 @@ while True:
             if not user in crawled:
                 cnt = getCount(user, animeSet)
                 if cnt >= 100:
-                    append('./userlist.txt', user)
+                    append('../user.txt', user)
                     userList += [user]
                 crawled.add(user)
                 print str(cnt) + " " + user

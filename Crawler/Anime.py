@@ -2,6 +2,7 @@ from Functions import *
 
 animeList = []
 
+
 for x in range(0, 1000, 50):
     print x
     soup = readUrl("http://myanimelist.net/topanime.php?limit=" + str(x))
@@ -11,4 +12,4 @@ for x in range(0, 1000, 50):
             if animeNum.isdigit() and not animeNum in animeList :
                 animeList += [animeNum]
 
-save('./animelist.txt', animeList)
+save('../animelist.txt', animeList)

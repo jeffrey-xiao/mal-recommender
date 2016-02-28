@@ -1,12 +1,12 @@
 from Functions import *
 
-animeSet = loadSet('./animelist.txt')
-forumSet = loadSet('./forumPosts.txt')
+animeSet = loadSet('../animelist.txt')
+forumSet = loadSet('../forumPosts.txt')
 
 userList = []
 crawled = set()
 
-(crawled, userList) = load('./forumUsers.txt')
+(crawled, userList) = load('../forumUsers.txt')
 
 for anime in animeSet:
     print "\nCurrent anime " + anime + "\n"
@@ -27,7 +27,7 @@ for anime in animeSet:
                                 if not user in crawled:
                                     cnt = getCount(user, animeSet)
                                     if cnt >= 100:
-                                        append('./forumUsers.txt', user)
+                                        append('../forumUsers.txt', user)
                                         userList += [user]
                                     crawled.add(user)
                                     print str(cnt) + " " + user
@@ -37,7 +37,7 @@ for anime in animeSet:
                         pageSoup = readUrl('http://myanimelist.net'+link.get('href')+'&show='+str(pageCnt), "html5lib")
                     print "Users saved " + link.get('href')
                     forumSet.add(forumId)
-                    append('./forumPosts.txt', forumId)
+                    append('../forumPosts.txt', forumId)
         cnt += 50
         animeSoup = readUrl('http://myanimelist.net/forum/?animeid='+anime+'&show='+str(cnt), "html5lib")
 
