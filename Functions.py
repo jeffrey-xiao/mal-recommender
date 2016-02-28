@@ -1,8 +1,16 @@
 from bs4 import BeautifulSoup
 from nltk.downloader import urllib2
-import socket
 import contextlib
 import time
+import csv
+import numpy as np
+
+
+def loadCSV (filePath, datatype = np.int) :
+    with open(filePath,'r') as dest_file:
+        data_iter = csv.reader(dest_file, delimiter=",", quotechar='"')
+        data = [line for line in data_iter]
+    return np.asarray(data, dtype=datatype)
 
 ''' 
 Returns a set from a file
@@ -12,6 +20,17 @@ def loadSet (filePath) :
     ret = set()
     for line in open(filePath):
         ret.add(str(line.rstrip('\n')))
+    return ret
+
+'''
+Returns a list from a file
+The items listed in the file must be separated by \n characters
+'''
+
+def loadList (filePath) :
+    ret = []
+    for line in open(filePath):
+        ret += [str(line.rstrip('\n'))]
     return ret
 
 '''
@@ -34,7 +53,7 @@ The items will be separated by \n characters
 def save (filePath, itemList) :
     f = open(filePath, 'w+')
     for item in itemList :
-        f.write(item+"\n")
+        f.write(str(item)+"\n")
     f.close()
 
 '''
@@ -45,6 +64,7 @@ def append (filePath, item) :
     f = open(filePath, 'a')
     f.write(item+"\n")
     f.close()
+    
 '''
 Returns the number of completed and scored anime in animeSet of a specific user
 '''
@@ -60,6 +80,25 @@ def getCount (user, animeSet):
             if anime.find('series_status').getText() == '2' and anime.find('my_score').getText() != '0' and anime.find('series_animedb_id').getText() in animeSet:
                 cnt += 1
     return cnt
+
+def getRatings (user, animeList):
+    animeMap = {}
+
+    for i in range(len(animeList)) :
+        animeMap[animeList[i]] = i
+    
+    ret = np.zeros(len(animeList))
+    
+    userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+    while userSoup == None:
+        time.sleep(10);
+        userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+    
+    for anime in userSoup.find_all('anime'):
+        if anime.find('series_animedb_id') != None :
+            if anime.find('series_animedb_id').getText() in animeMap:
+                ret[animeMap[anime.find('series_animedb_id').getText()]] = anime.find('my_score').getText()
+    return ret
 
 '''
 Attempts to read a url. If reading fails, it will return None, otherwise it will return
