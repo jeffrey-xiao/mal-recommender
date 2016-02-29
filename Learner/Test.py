@@ -3,16 +3,18 @@ import numpy as np
 from scipy import optimize
 import time
 
-testList = loadList('../test.txt')
+#testList = loadList('../test.txt')
+testList = ['kyosho2']
 
 animeList = loadList('../animelist.txt')
 anime = len(animeList)
 
-numOfFeatures = 500
-x = loadCSV('../theta20.csv', np.float)
+reg = 15
+numOfFeatures = 1000
+
+x = loadCSV('../features-'+str(numOfFeatures)+'/theta'+str(reg)+'.csv', np.float)
 animeTheta = np.reshape(x[0:anime * numOfFeatures], (anime, numOfFeatures))
 
-reg = 20.0
 
 ratings = getRatings('jeffreyxiao', animeList)
 currRatings = ratings
@@ -71,17 +73,17 @@ for user in testList:
             
             print "Actual value="+str(ratings[i])+"; Predicted value=" + str(animeTheta.dot(x1)[i])
             diffSquared = (ratings[i] - animeTheta.dot(x1)[i])**2
-            print "Diff Squared="+str(diffSquared)
+            # print "Diff Squared="+str(diffSquared)
             total += 1
             if diffSquared <= 0.25:
                 correct += 1
             if diffSquared <= 1:
                 correct2 += 1
-            if diffSquared <= 4:
-                correct3 += 1
+            # if diffSquared <= 4:
+            #    correct3 += 1
             else :
                 print "WRONG " + str(animeList[i])
-            print ""
+            # print ""
                 
     print str(correct) + " " + str(total) + " " + str(cnt)
     print correct / total

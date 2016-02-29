@@ -7,13 +7,14 @@ animeList = loadList('../animelist.txt')
 ratings = loadCSV('../ratings.csv')
 hasRating = np.array(ratings)
 hasRating[hasRating != 0] = 1 
-numOfFeatures = 1000
+
+numOfFeatures = 50
+reg = 30
 
 numOfTrainingSets = np.count_nonzero(hasRating)
 
 users = len(userList)
 anime = len(animeList)
-reg = 30.0
 
 
 def getCost (x):    
@@ -42,10 +43,10 @@ x0 = np.random.rand(users * numOfFeatures + anime * numOfFeatures) / 10
 
 print getCost(x0)
 
-x1 = optimize.fmin_cg(getCost, x0, fprime=getGradient, callback=callback, maxiter=300)
+x1 = optimize.fmin_cg(getCost, x0, fprime=getGradient, callback=callback, maxiter=200)
 
 print "Done minimizing"
 print getCost(x1)
 
-np.savetxt("../features-1000/theta30.csv", x1[0:anime * numOfFeatures], delimiter=",")
+np.savetxt("../features-"+str(numOfFeatures)+"/theta"+str(reg)+".csv", x1[0:anime * numOfFeatures], delimiter=",")
     
