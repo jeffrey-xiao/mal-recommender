@@ -31,6 +31,12 @@ Top row is regularization parameter.
 | Score Diff <= 1 | 0.73246 | 0.73893 | 0.73129 | 0.69986 |
 | Score Diff <= 2 | 0.94799 | 0.95033 | 0.94555 | 0.93502 |
 
+## Improvements and Some Notes
+ - Increasing the features will marginally increase the accuracy
+ - More data (Some of the anime only have a few hundred ratings)
+ - Guessing the median score yields an accuracy of about 30% so a linear regression works substantially better.
+ - The more anime the user has watched, the more accurate the predictor is
+
 ## Conclusion
 A linear regression recommender system generally works pretty well. With a regularization parameter of 15 and 1000 features, 
 it can get 45% of all scores correct, 75% of all scores correct within one point, and 95% of all scores correct within two points.
