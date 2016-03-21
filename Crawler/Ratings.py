@@ -1,13 +1,13 @@
 from Functions import *
 import numpy as np
 
-animeList = loadList('../animelist.txt')
+animeList = loadList('../animeList.txt')
 animeMap = {}
 
 for i in range(len(animeList)) :
     animeMap[animeList[i]] = i
 
-userList = loadList('../userlist.txt')
+userList = loadList('../userList.txt')
 
 # ratings = np.zeros((len(animeList), len(userList)), dtype=np.int)
 ratings = loadCSV('../ratings.csv')

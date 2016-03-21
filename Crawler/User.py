@@ -6,8 +6,8 @@ userList = []
 
 crawled = set()
 
-animeSet = loadSet('../animelist.txt')
-(crawled, userList) = load('../user.txt')
+animeSet = loadSet('../animeList.txt')
+(crawled, userList) = load('../userList.txt')
 
 while True:
     page = urllib2.urlopen('http://myanimelist.net/users.php').read()

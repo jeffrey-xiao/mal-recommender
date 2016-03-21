@@ -1,7 +1,7 @@
 from Functions import *
 
 animeList = []
-
+animeTitles = []
 
 for x in range(0, 1000, 50):
     print x
@@ -11,5 +11,7 @@ for x in range(0, 1000, 50):
             animeNum = str(link.get('href').split('/')[4])
             if animeNum.isdigit() and not animeNum in animeList :
                 animeList += [animeNum]
+                animeTitles += [getAnimeTitle(animeNum)]
 
-save('../animelist.txt', animeList)
+save('../animeList.txt', animeList)
+save('../animeTitles.txt', animeTitles)

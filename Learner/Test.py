@@ -3,21 +3,21 @@ import numpy as np
 from scipy import optimize
 import time
 
-#testList = loadList('../test.txt')
-testList = ['kyosho2']
+testList = loadList('../test.txt')
+# testList = ['jeffreyxiao']
 
-animeList = loadList('../animelist.txt')
+animeList = loadList('../animeList.txt')
 anime = len(animeList)
 
-reg = 15
-numOfFeatures = 1000
+reg = 25
+numOfFeatures = 500
 
 x = loadCSV('../features-'+str(numOfFeatures)+'/theta'+str(reg)+'.csv', np.float)
 animeTheta = np.reshape(x[0:anime * numOfFeatures], (anime, numOfFeatures))
 
 
-ratings = getRatings('jeffreyxiao', animeList)
-currRatings = ratings
+ratings = []
+currRatings = []
 
 
 def getCost (x):
@@ -71,7 +71,7 @@ for user in testList:
             x0 = np.random.rand(numOfFeatures)
             x1 = optimize.fmin_cg(getCost, x0, fprime=getGradient, callback=callback, disp=False)
             
-            print "Actual value="+str(ratings[i])+"; Predicted value=" + str(animeTheta.dot(x1)[i])
+            # print "Actual value="+str(ratings[i])+"; Predicted value=" + str(animeTheta.dot(x1)[i])
             diffSquared = (ratings[i] - animeTheta.dot(x1)[i])**2
             # print "Diff Squared="+str(diffSquared)
             total += 1
@@ -79,10 +79,10 @@ for user in testList:
                 correct += 1
             if diffSquared <= 1:
                 correct2 += 1
-            # if diffSquared <= 4:
-            #    correct3 += 1
-            else :
-                print "WRONG " + str(animeList[i])
+            if diffSquared <= 4:
+                correct3 += 1
+            # else :
+                # print "WRONG " + str(animeList[i])
             # print ""
                 
     print str(correct) + " " + str(total) + " " + str(cnt)

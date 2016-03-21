@@ -1,6 +1,6 @@
 from Functions import *
 
-animeSet = loadSet('../animelist.txt')
+animeSet = loadSet('../animeList.txt')
 forumSet = loadSet('../forumPosts.txt')
 
 userList = []

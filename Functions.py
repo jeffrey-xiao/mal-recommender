@@ -69,10 +69,11 @@ def append (filePath, item) :
 Returns the number of completed and scored anime in animeSet of a specific user
 '''
 def getCount (user, animeSet):
-    userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+    userSoup = readUrl('http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime', 'xml')
     while userSoup == None:
         time.sleep(10);
-        userSoup = readUrl('http://myanimelist.net/malappinfo.php?u='+user+'&status=all&type=anime', 'xml')
+        userSoup = readUrl('http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime', 'xml')
+        print 'Failed to read http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime. Retrying.'
     
     cnt = 0
     for anime in userSoup.find_all('anime'):
@@ -81,6 +82,9 @@ def getCount (user, animeSet):
                 cnt += 1
     return cnt
 
+'''
+Get the ratings for a specific user for every anime listed in animeList
+'''
 def getRatings (user, animeList):
     animeMap = {}
 
@@ -101,6 +105,16 @@ def getRatings (user, animeList):
     return ret
 
 '''
+Get the name/title of an anime given its id
+'''
+def getAnimeTitle (animeId) :
+    animeSoup = readUrl('http://myanimelist.net/anime/' + str(animeId), 'html.parser')
+    while animeSoup == None:
+        time.sleep(10);
+        print 'Failed to read http://myanimelist.net/anime/' + str(animeId) + '. Retrying.'
+    return animeSoup.find('span', {'itemprop' : 'name'}).get_text()
+
+'''
 Attempts to read a url. If reading fails, it will return None, otherwise it will return
 a Beautiful Soup object
 '''
@@ -116,3 +130,6 @@ def readUrl (url, parser = 'html') :
     except:
         print "ERROR"
         return None
+
+def removeNonAscii(s) : 
+    return "".join(i for i in s if ord(i)<128)
