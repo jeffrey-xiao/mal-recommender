@@ -36,6 +36,7 @@ Top row is regularization parameter.
  - More data (Some of the anime only have a few hundred ratings)
  - Guessing the median score yields an accuracy of about 30% so a linear regression works substantially better.
  - The more anime the user has watched, the more accurate the predictor is
+ - Fuzzy k-means and k-means can be used to cluster anime and find groups
 
 ## Conclusion
 A linear regression recommender system generally works pretty well. With a regularization parameter of 15 and 1000 features, 
